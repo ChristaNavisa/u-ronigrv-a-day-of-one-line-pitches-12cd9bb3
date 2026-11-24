@@ -35,10 +35,17 @@ function checkEntry(text: string): void {
   }
 }
 
-function saveEntry(text: string): void {
-  const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
+function resolveOutDir(): string {
+  return process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
+}
+
+function writeEntry(outDir: string, line: string): void {
   mkdirSync(outDir, { recursive: true });
-  writeFileSync(join(outDir, "entry.txt"), text, "utf8");
+  writeFileSync(join(outDir, "entry.txt"), line, "utf8");
+}
+
+function saveEntry(text: string): void {
+  writeEntry(resolveOutDir(), text);
 }
 
 checkEntry(entryLine);
