@@ -1,42 +1,45 @@
-// A Day of One-Line Pitches — round 3 entry.
-// Writes one sentence, 240 characters at most, that would convince a friend
-// who has never coded to let an AI agent build their first app idea on
-// make.fun. Round 3 attacks the two gaps round 2 missed: a concrete reason
-// to say yes NOW (tonight, one sentence, nothing to install or learn) and a
-// fresh turn of phrase instead of the plain-words template the whole
-// mid-field is using. The sentence is fixed and deterministic: the same
-// bytes on every run, so the entry is reproducible by the grader.
+// A Day of One-Line Pitches — round 4 entry (final round).
+//
+// One sentence, 240 characters at most, that would convince a friend who has
+// never coded to let an AI agent build their first app idea on make.fun.
+// The sentence is the whole entry: no code, no explanation.
+//
+// Round 4 attacks the two gaps rounds 1-3 never closed. First, the risk
+// closer: every earlier pitch promised ease ("nothing to install, nothing to
+// learn") but never capped the downside, so the friend still had to gamble a
+// whole evening on a stranger's tool. This one names the worst case out loud
+// — ten minutes — and the best case right beside it. Second, the hook is
+// personal, not generic: it opens on the idea this one friend has already
+// brought up again and again, instead of "the app you keep wishing existed".
+// The payoff stays honest ("the first version"), the words stay plain, and
+// the whole thing reads like one friend talking to another.
+//
+// The sentence is fixed and deterministic: the same bytes on every run.
 
 import { mkdirSync, writeFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { join } from "node:path";
 
-const LINE =
-  "That app you keep wishing existed? Tell an agent on make.fun tonight — one sentence, nothing to install, nothing to learn — and by the time your tea's gone cold you'll have a first version to poke at.";
+const entryLine =
+  "You've told me about that app three times this week, so tell an agent on make.fun about it the way you'd tell me — worst case you lose ten minutes, best case you're tapping the first version tonight.";
 
-function resolveOutDir(): string {
-  return process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
-}
-
-function writeEntry(outDir: string): void {
-  mkdirSync(outDir, { recursive: true });
-  writeFileSync(resolve(outDir, "entry.txt"), LINE, "utf8");
-}
-
-const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)));
-void repoRoot;
-
-function validateLine(line: string): string {
-  const trimmed = line.trim();
-  if (trimmed.length < 1 || trimmed.length > 240) {
-    throw new Error(`entry must be 1-240 characters, got ${trimmed.length}`);
+function checkEntry(text: string): void {
+  const chars = [...text];
+  if (chars.length < 1 || chars.length > 240) {
+    throw new Error(`entry must be 1-240 characters, got ${chars.length}`);
   }
-  if (trimmed.includes("\n")) {
+  if (text.trim().length === 0) {
+    throw new Error("entry must not be only white space");
+  }
+  if (text.includes("\n") || text.includes("\r")) {
     throw new Error("entry must be a single line");
   }
-  return trimmed;
 }
 
-const outDir = resolveOutDir();
-validateLine(LINE);
-writeEntry(outDir);
+function saveEntry(text: string): void {
+  const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
+  mkdirSync(outDir, { recursive: true });
+  writeFileSync(join(outDir, "entry.txt"), text, "utf8");
+}
+
+checkEntry(entryLine);
+saveEntry(entryLine);

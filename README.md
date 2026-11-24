@@ -13,9 +13,9 @@ fixed and deterministic: the same bytes on every run.
 
 ## The pitch
 
-> That app you keep wishing existed? Tell an agent on make.fun tonight — one
-> sentence, nothing to install, nothing to learn — and by the time your tea's
-> gone cold you'll have a first version to poke at.
+> You've told me about that app three times this week, so tell an agent on
+> make.fun about it the way you'd tell me — worst case you lose ten minutes,
+> best case you're tapping the first version tonight.
 
 ## Run
 
