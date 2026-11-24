@@ -13,9 +13,9 @@ fixed and deterministic: the same bytes on every run.
 
 ## The pitch
 
-> You already know the app you want — the one that reminds Mum it's her
-> birthday — so just describe it in plain words on make.fun and let the
-> agent build it; if it's not right, you change the words, never the code.
+> That app you keep wishing existed? Tell an agent on make.fun tonight — one
+> sentence, nothing to install, nothing to learn — and by the time your tea's
+> gone cold you'll have a first version to poke at.
 
 ## Run
 

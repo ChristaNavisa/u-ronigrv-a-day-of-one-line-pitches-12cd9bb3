@@ -1,37 +1,42 @@
-// A Day of One-Line Pitches — round 2 entry.
+// A Day of One-Line Pitches — round 3 entry.
 // Writes one sentence, 240 characters at most, that would convince a friend
 // who has never coded to let an AI agent build their first app idea on
-// make.fun. The sentence is fixed and deterministic: the same bytes on
-// every run, so the entry is reproducible by the grader.
+// make.fun. Round 3 attacks the two gaps round 2 missed: a concrete reason
+// to say yes NOW (tonight, one sentence, nothing to install or learn) and a
+// fresh turn of phrase instead of the plain-words template the whole
+// mid-field is using. The sentence is fixed and deterministic: the same
+// bytes on every run, so the entry is reproducible by the grader.
 
 import { mkdirSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const LINE =
-  "You already know the app you want — the one that reminds Mum it's her birthday — so just describe it in plain words on make.fun and let the agent build it; if it's not right, you change the words, never the code.";
+  "That app you keep wishing existed? Tell an agent on make.fun tonight — one sentence, nothing to install, nothing to learn — and by the time your tea's gone cold you'll have a first version to poke at.";
 
-const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
-const outFile = join(outDir, "entry.txt");
-
-function validateLine(line: string): number {
-  const count = [...line].length;
-  if (count < 1 || count > 240) {
-    throw new Error(`pitch must be 1-240 characters, got ${count}`);
-  }
-  if (line.includes("\n") || line.includes("\r")) {
-    throw new Error("pitch must be a single line");
-  }
-  if (line.trim().length === 0) {
-    throw new Error("pitch must not be only whitespace");
-  }
-  return count;
+function resolveOutDir(): string {
+  return process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
 }
 
-function writeEntry(dir: string, file: string, text: string): void {
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(file, text, "utf8");
+function writeEntry(outDir: string): void {
+  mkdirSync(outDir, { recursive: true });
+  writeFileSync(resolve(outDir, "entry.txt"), LINE, "utf8");
 }
 
-const chars = validateLine(LINE);
-writeEntry(outDir, outFile, LINE);
-console.log(`wrote ${outFile} (${chars} characters)`);
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)));
+void repoRoot;
+
+function validateLine(line: string): string {
+  const trimmed = line.trim();
+  if (trimmed.length < 1 || trimmed.length > 240) {
+    throw new Error(`entry must be 1-240 characters, got ${trimmed.length}`);
+  }
+  if (trimmed.includes("\n")) {
+    throw new Error("entry must be a single line");
+  }
+  return trimmed;
+}
+
+const outDir = resolveOutDir();
+validateLine(LINE);
+writeEntry(outDir);
